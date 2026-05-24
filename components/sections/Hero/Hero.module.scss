@@ -3,18 +3,43 @@
 .heroSection {
   position: relative;
   z-index: 2; // Higher than Welcome's z-index (1)
-  background-color: #ffffff; // Dark premium background
+  background-color: #ffffff;
   min-height: 100vh;
   box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3); // Adds a creative reveal shadow
-  padding: 4rem 2rem;
+  padding: 4rem 2rem 6rem 2rem;
   color: #000000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  .glow {
+    position: absolute;
+    width: 40rem;
+    height: 40rem;
+    background: radial-gradient(
+      circle,
+      rgba(99, 102, 241, 0.22) 0%,
+      rgba(236, 72, 153, 0.18) 45%,
+      rgba(0, 0, 0, 0) 70%
+    );
+    border-radius: 50%;
+    filter: blur(60px);
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
 
   .boyHand {
     position: absolute;
     top: -17.5rem;
-    left: 30%;
+    left: 50%;
     transform: translateX(-50%);
-    will-change: transform;
+    z-index: 3; // Position above the glow backdrop
+    will-change: transform, opacity, filter;
 
     .boyHandImage {
       width: 100%;
@@ -27,12 +52,15 @@
 
   .portfolio {
     position: relative;
+    z-index: 2; // Above glow
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     width: 100%;
-    padding: 1rem 0 1rem 0;
+    margin-top: 10vh;
+    padding: 1rem 0;
+    will-change: transform, opacity;
 
     .portText {
       position: absolute;
@@ -42,17 +70,159 @@
       top: -3rem;
       left: 38%;
       transform: translateX(-50%);
+      will-change: transform, opacity;
+      z-index: 1;
     }
+
     .folioText {
       font-family: vars.$font-anton;
       font-size: 8rem;
       background: orangered;
-      border: 2px dashed #000;
+      border-style: dashed;
+      border-width: 2px;
+      border-color: #000000;
       text-transform: uppercase;
       letter-spacing: 0.3rem;
       width: 24rem;
       text-align: center;
       height: fit-content;
+      will-change: transform, opacity, background-color, border-color;
     }
+  }
+
+  .portraitContainer {
+    position: relative;
+    width: 22rem;
+    height: 28rem;
+    border-radius: 2rem;
+    overflow: hidden;
+    background: rgb(13, 13, 18);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    margin: 3rem 0;
+    cursor: none; // Hide normal cursor inside portrait container to let spotlight act as the focus
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    will-change: transform, border-color, box-shadow;
+    z-index: 4; // Above the background glow
+
+    @media (max-width: 768px) {
+      width: 18rem;
+      height: 23rem;
+      margin: 2rem 0;
+    }
+
+    // Cover layer (inactive view)
+    .coverLayer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      background: #09090c;
+      overflow: hidden;
+
+      .silhouetteImage {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.25;
+        filter: grayscale(1) blur(8px) brightness(0.65) contrast(1.15);
+        mix-blend-mode: luminosity;
+        transform: scale(1.02);
+      }
+
+      .coverTextContainer {
+        position: absolute;
+        bottom: 2rem;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        z-index: 3;
+        pointer-events: none;
+
+        .unveilText {
+          font-family: vars.$font-goldman;
+          font-size: 0.8rem;
+          letter-spacing: 0.35rem;
+          color: rgba(255, 255, 255, 0.4);
+          text-transform: uppercase;
+          animation: pulseGlow 2.2s infinite ease-in-out;
+        }
+
+        .creatorName {
+          font-family: vars.$font-bebas;
+          font-size: 2.2rem;
+          letter-spacing: 0.15rem;
+          color: rgba(255, 255, 255, 0.85);
+          margin-top: 0.4rem;
+          text-transform: uppercase;
+
+          @media (max-width: 768px) {
+            font-size: 1.8rem;
+          }
+        }
+      }
+    }
+
+    // Revealed layer (active masked spotlight view)
+    .revealLayer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+      pointer-events: none; // Allow mouse movements to bubble to parent
+      will-change: clip-path;
+
+      .revealedImage {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(1.05) contrast(1.05);
+      }
+    }
+
+    // Pointer light source tracker
+    .pointerOrb {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 10px;
+      height: 10px;
+      background: #ffffff;
+      border-radius: 50%;
+      box-shadow:
+        0 0 15px #ffffff,
+        0 0 30px rgba(99, 102, 241, 1),
+        0 0 45px rgba(236, 72, 153, 0.8);
+      z-index: 4;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      will-change: transform, opacity;
+    }
+  }
+}
+
+@keyframes pulseGlow {
+  0% {
+    opacity: 0.35;
+    text-shadow: 0 0 0px rgba(255, 255, 255, 0);
+  }
+  50% {
+    opacity: 0.85;
+    text-shadow: 0 0 10px rgba(99, 102, 241, 0.6);
+    color: rgba(255, 255, 255, 0.75);
+  }
+  100% {
+    opacity: 0.35;
+    text-shadow: 0 0 0px rgba(255, 255, 255, 0);
   }
 }
