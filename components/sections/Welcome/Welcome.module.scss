@@ -1,0 +1,43 @@
+@use "../../../app/styles/variables" as vars;
+
+.heroSection {
+  height: 50.2vh;
+  width: 100%;
+  background-color: #fcf4f1; // Premium light peach/beige background
+  overflow: hidden;
+
+  .welcome {
+    position: relative;
+    font-family: vars.$font-ubuntu;
+    width: inherit;
+    height: 4.5rem;
+    background: whitesmoke;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    p {
+      font-family: vars.$font-roboto;
+      font-size: 2rem;
+      text-transform: uppercase;
+      letter-spacing: 1rem;
+      color: black;
+      font-weight: 400;
+    }
+  }
+
+  .topImageElem {
+    width: inherit;
+    height: inherit;
+    background: purple;
+
+    .theBoyImage {
+      position: relative;
+      top: -1.7rem;
+      height: 35rem;
+      object-fit: contain;
+      object-position: center top;
+      filter: drop-shadow(-1px -1px 2px #111111a4);
+    }
+  }
+}

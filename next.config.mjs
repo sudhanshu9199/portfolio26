@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  sassOptions: {
+    silenceDeprecations: ['import', 'legacy-js-api'],
+  },
 };
 
 export default nextConfig;

@@ -1,0 +1,43 @@
+// Import global variables & mixins
+@use "./styles/variables" as vars;
+
+// Import Tailwind v4
+@import "tailwindcss";
+
+:root {
+  --background: #{vars.$bg-light};
+  --foreground: #{vars.$text-light};
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  
+  // Custom font configurations mapping to Google Fonts
+  --font-sans: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+  --font-anton: 'Anton', sans-serif;
+  --font-bebas: 'Bebas Neue', sans-serif;
+  --font-exo: 'Exo 2', sans-serif;
+  --font-goldman: 'Goldman', sans-serif;
+  --font-hind: 'Hind Siliguri', sans-serif;
+  --font-oswald: 'Oswald', sans-serif;
+  --font-pacifico: 'Pacifico', cursive;
+  --font-roboto: 'Roboto', sans-serif;
+  --font-ubuntu: 'Ubuntu', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #{vars.$bg-dark};
+    --foreground: #{vars.$text-dark};
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  margin: 0;
+}
