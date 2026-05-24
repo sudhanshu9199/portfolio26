@@ -1,10 +1,14 @@
 import React from "react";
-import Hero from "@/components/sections/Welcome/Welcome";
+import Welcome from "@/components/sections/Welcome/Welcome";
+import HeroSection from "@/components/sections/Hero/Hero";
 
 export default function Home() {
   return (
-    <main>
-      <Hero />
+    <main className="position: relative;">
+      <Welcome />
+
+      {/* This is the bottom section that scrolls up and covers the Hero */}
+      <HeroSection />
     </main>
   );
 }

@@ -5,7 +5,7 @@ import theBoyImage from '../../../public/theBoy.png';
 
 const Hero = () => {
   return (
-    <section className={styles.heroSection}>
+    <section className={styles.welSection}>
       <div className={styles.welcome}>
         <p>Welcome to my</p>
       </div>
