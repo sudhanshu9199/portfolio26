@@ -3,11 +3,11 @@
 .welSection {
   height: 50.2vh;
   width: 100%;
-  background-color: #fcf4f1; // Premium light peach/beige background
   overflow: hidden;
   position: sticky;
   top: 0;
   z-index: 1;
+  background-color: #fcf4f1; // Premium light peach/beige background
 
   .welcome {
     position: relative;
@@ -29,18 +29,160 @@
     }
   }
 
-  .topImageElem {
-    width: inherit;
-    height: inherit;
-    background: purple;
+  .contentWrapper {
+    position: relative;
+    width: 100%;
+    max-width: inherit;
+    height: calc(100% - 3rem);
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    .theBoyImage {
+    .topImageElem {
+      width: inherit;
+      height: inherit;
+      background: purple; // Premium transparent layout
+      will-change: transform;
       position: relative;
-      top: -1.7rem;
-      height: 35rem;
-      object-fit: contain;
-      object-position: center top;
-      filter: drop-shadow(-1px -1px 2px #111111a4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .theBoyImage {
+        position: relative;
+        top: 5rem;
+        height: 35rem;
+        object-fit: contain;
+        object-position: center top;
+        filter: drop-shadow(-1px -1px 2px #111111a4);
+
+        @media (max-width: 768px) {
+          height: 28rem;
+          top: 2rem;
+        }
+      }
     }
+
+    .icon {
+      position: absolute;
+      height: 8rem;
+      width: 8rem;
+      object-fit: contain;
+      object-position: center;
+
+      @media (max-width: 1024px) {
+        height: 6rem;
+        width: 6rem;
+      }
+
+      @media (max-width: 768px) {
+        height: 4.5rem;
+        width: 4.5rem;
+      }
+    }
+
+    // Centered coordinates on 1200px max-width boundary
+    .bulbIcon {
+      top: 5rem;
+      right: 32rem;
+      rotate: 18deg;
+
+      @media (max-width: 1024px) {
+        right: 18rem;
+        top: 4rem;
+      }
+
+      @media (max-width: 768px) {
+        right: 3rem;
+        top: 2rem;
+      }
+    }
+
+    .pencilIcon {
+      top: 1rem;
+      left: 3rem;
+      rotate: 18deg;
+
+      @media (max-width: 768px) {
+        display: none; // Hide extra items to prevent clutter on mobile
+      }
+    }
+
+    .jsIcon {
+      bottom: 5rem;
+      left: 4rem;
+      rotate: -35deg;
+
+      @media (max-width: 768px) {
+        bottom: 2rem;
+        left: 2rem;
+      }
+    }
+
+    .mongodbIcon {
+      bottom: 1rem;
+      left: 20rem;
+      rotate: 20deg;
+
+      @media (max-width: 1024px) {
+        left: 15rem;
+      }
+
+      @media (max-width: 768px) {
+        bottom: 1rem;
+        left: 8rem;
+      }
+    }
+
+    .nodejsIcon {
+      top: 5rem;
+      left: 25rem;
+      rotate: 10deg;
+
+      @media (max-width: 1024px) {
+        left: 18rem;
+        top: 4rem;
+      }
+
+      @media (max-width: 768px) {
+        left: 3rem;
+        top: 2rem;
+      }
+    }
+
+    .reactIcon {
+      top: 5.5rem;
+      right: 6rem;
+      rotate: -10deg;
+
+      @media (max-width: 768px) {
+        top: 6rem;
+        right: 2rem;
+      }
+    }
+
+    .gridIcon {
+      bottom: 1rem;
+      right: 20rem;
+      rotate: 10deg;
+
+      @media (max-width: 1024px) {
+        right: 15rem;
+      }
+
+      @media (max-width: 768px) {
+        display: none; // Hide extra items to prevent clutter on mobile
+      }
+    }
+  }
+}
+
+@keyframes rotateIcon {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

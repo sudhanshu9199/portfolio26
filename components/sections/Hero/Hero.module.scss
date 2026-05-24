@@ -1,15 +1,20 @@
+@use "../../../app/styles/variables" as vars;
+
 .heroSection {
   position: relative;
   z-index: 2; // Higher than Welcome's z-index (1)
-  background-color: #1a1a1a; // Dark premium background
+  background-color: #ffffff; // Dark premium background
   min-height: 100vh;
   box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3); // Adds a creative reveal shadow
   padding: 4rem 2rem;
-  color: #ffffff;
+  color: #000000;
 
   .boyHand {
-    position: relative;
-    top: -21rem;
+    position: absolute;
+    top: -17.5rem;
+    left: 30%;
+    transform: translateX(-50%);
+    will-change: transform;
 
     .boyHandImage {
       width: 100%;
@@ -17,6 +22,37 @@
       object-fit: contain;
       object-position: top;
       filter: drop-shadow(-1px -1px 2px #111111a4);
+    }
+  }
+
+  .portfolio {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    padding: 1rem 0 1rem 0;
+
+    .portText {
+      position: absolute;
+      font-family: vars.$font-pacifico;
+      font-size: 5rem;
+      font-weight: 100;
+      top: -3rem;
+      left: 38%;
+      transform: translateX(-50%);
+    }
+    .folioText {
+      font-family: vars.$font-anton;
+      font-size: 8rem;
+      background: orangered;
+      border: 2px dashed #000;
+      text-transform: uppercase;
+      letter-spacing: 0.3rem;
+      width: 24rem;
+      text-align: center;
+      height: fit-content;
     }
   }
 }
