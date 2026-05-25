@@ -273,7 +273,7 @@ const Hero = () => {
         />
       </div>
 
-      <Navbar />
+      {/* <Navbar /> */}
     </motion.section>
   );
 };
