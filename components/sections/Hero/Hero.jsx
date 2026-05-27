@@ -1,129 +1,276 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useMotionTemplate,
-  useMotionValue,
-  useSpring,
-  animate,
-} from "framer-motion";
+
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import styles from "./Hero.module.scss";
 import boyHandImage from "../../../public/boyHand.png";
 import sudhanshuImage from "../../../public/images/sudhanshu.png";
 import Navbar from "@/components/layout/Navbar/Navbar";
 
+// Safely register GSAP plugins on the client
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+// Word-wrapping responsive scroll reveal layout component that coordinates staggered double-layer accessibility reveals
+const ScrollRevealText = ({ text, fontClass, lineClass }) => {
+  const words = text.split(" ");
+
+  return (
+    <div className={`${styles.revealParagraph} ${lineClass}`}>
+      <div className={`${styles.animateMe} ${fontClass} animate-me`} aria-hidden="true">
+        {words.map((word, wordIdx) => (
+          <span key={wordIdx} className={`${styles.word} word-reveal`}>
+            {word}
+            {wordIdx < words.length - 1 && "\u00A0"}
+          </span>
+        ))}
+      </div>
+      <p className={styles.srOnly}>
+        {text}
+      </p>
+    </div>
+  );
+};
+
 const Hero = () => {
+  const containerRef = useRef(null);
   const sectionRef = useRef(null);
+  const glowRef = useRef(null);
+  const handRef = useRef(null);
+  const portTextRef = useRef(null);
+  const folioTextRef = useRef(null);
   const cardRef = useRef(null);
+  const manifestoRef = useRef(null);
 
-  // Track the scroll progress of the Hero section as it enters the viewport and reaches the top
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "start start"],
-  });
+  // 1. GSAP ScrollTrigger Pinning & Staggered Typographic Manifesto
+  useGSAP(
+    () => {
+      let mm = gsap.matchMedia();
 
-  // 1. Dynamic Background and Text Color Transitions (Light to Premium Dark Theme Shift)
-  const heroBg = useTransform(
-    scrollYProgress,
-    [0, 0.65, 1],
-    ["#ffffff", "#f8f9fa", "#0a0a0c"],
-  );
-  const textColor = useTransform(
-    scrollYProgress,
-    [0.65, 1],
-    ["#000000", "#f3f4f6"],
+      // DESKTOP & TABLET TIMELINE (> 768px)
+      mm.add("(min-width: 769px)", () => {
+        // Set initial states for high-fidelity entry transitions
+        gsap.set(portTextRef.current, { x: -160, rotate: -18, opacity: 0.3 });
+        gsap.set(folioTextRef.current, {
+          x: 160,
+          rotate: 18,
+          opacity: 0.2,
+          backgroundColor: "rgba(255, 69, 0, 0.1)",
+          borderColor: "#000000",
+        });
+        gsap.set(handRef.current, {
+          y: 0,
+          opacity: 1,
+          scale: 0.95,
+          rotate: 0,
+          filter: "blur(0px)",
+        });
+        gsap.set(manifestoRef.current, { opacity: 0, x: -30 });
+        gsap.set(".word-reveal", { opacity: 0, y: 15 });
+        gsap.set(cardRef.current, { x: 0 }); // Center alignment
+
+        // Setup master viewport pinning timeline
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 6%", // Pin instantly when top of Hero meets top of viewport
+            end: "+=85%", // Slightly more scroll height to give breathing room for staggered stagers
+            scrub: 1.2, // Smooth scroll tracking ease
+            pin: true, // PIN THE SECTION VIEWPORT
+            anticipatePin: 1,
+            markers: false, // Omit markers for production elegance
+          },
+        });
+
+        // Phase 1: Background Theme Transition, Hand Waves & Logo Snapping (0.0 to 1.5)
+        tl.to(
+          sectionRef.current,
+          { backgroundColor: "#0a0a0c", color: "#f3f4f6", duration: 1.5 },
+          0,
+        )
+          .to(glowRef.current, { opacity: 0.65, scale: 1.15, duration: 1.5 }, 0)
+          .to(
+            handRef.current,
+            {
+              y: -120,
+              opacity: 0,
+              scale: 0.88,
+              rotate: 0,
+              filter: "blur(18px)",
+              duration: 1.5,
+            },
+            0,
+          )
+          .to(
+            portTextRef.current,
+            { x: 0, rotate: 0, opacity: 1, duration: 1.5 },
+            0.2,
+          )
+          .to(
+            folioTextRef.current,
+            {
+              x: 0,
+              rotate: 0,
+              opacity: 1,
+              backgroundColor: "rgba(255, 69, 0, 1)",
+              borderColor: "#ffffff",
+              duration: 1.5,
+            },
+            0.2,
+          );
+
+        // Phase 2: Card slides smoothly to the Right Side (1.5 to 3.5)
+        tl.to(
+          cardRef.current,
+          { x: 240, ease: "power2.inOut", duration: 2.0 },
+          1.5,
+        );
+
+        // Phase 3: Left Side manifestoBlock reveals and Line 1 staggers (3.5 to 5.0)
+        tl.to(
+          manifestoRef.current,
+          { opacity: 1, x: 0, ease: "power2.out", duration: 0.8 },
+          3.5,
+        ).to(
+          ".line-1 .word-reveal",
+          {
+            opacity: 1,
+            y: 0,
+            stagger: 0.1,
+            ease: "sine.out",
+            duration: 1.5,
+          },
+          3.8,
+        );
+
+        // Phase 4: Line 2 staggers after a sequential breathing delay (5.2 to 7.5)
+        tl.to(
+          ".line-2 .word-reveal",
+          {
+            opacity: 1,
+            y: 0,
+            stagger: 0.1,
+            ease: "sine.out",
+            duration: 2.0,
+          },
+          5.2,
+        );
+      });
+
+      // MOBILE TIMELINE (<= 768px)
+      mm.add("(max-width: 768px)", () => {
+        // Set initial states for mobile center stacked layout
+        gsap.set(portTextRef.current, { x: -100, rotate: -10, opacity: 0 });
+        gsap.set(folioTextRef.current, {
+          x: 100,
+          rotate: 10,
+          opacity: 0,
+          backgroundColor: "rgba(255, 69, 0, 0.1)",
+          borderColor: "#000000",
+        });
+        gsap.set(handRef.current, {
+          y: 0,
+          opacity: 1,
+          scale: 0.95,
+          rotate: 0,
+          filter: "blur(0px)",
+        });
+        gsap.set(manifestoRef.current, { opacity: 1, x: 0 });
+        gsap.set(".word-reveal", { opacity: 0, y: 15 });
+        gsap.set(cardRef.current, { x: 0 });
+
+        // Mobile trigger without pinning (keeps mobile page flows natural)
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top center", // Trigger midway down viewport
+            end: "bottom center",
+            scrub: 1.2,
+          },
+        });
+
+        // Background transition & hand fadeout
+        tl.to(
+          sectionRef.current,
+          { backgroundColor: "#0a0a0c", color: "#f3f4f6", duration: 1.5 },
+          0,
+        )
+          .to(glowRef.current, { opacity: 0.6, scale: 1.05, duration: 1.5 }, 0)
+          .to(
+            handRef.current,
+            {
+              y: -80,
+              opacity: 0,
+              scale: 0.9,
+              rotate: 0,
+              filter: "blur(12px)",
+              duration: 1.5,
+            },
+            0,
+          )
+          .to(
+            portTextRef.current,
+            { x: 0, rotate: 0, opacity: 1, duration: 1.2 },
+            0.3,
+          )
+          .to(
+            folioTextRef.current,
+            {
+              x: 0,
+              rotate: 0,
+              opacity: 1,
+              backgroundColor: "rgba(255, 69, 0, 1)",
+              borderColor: "#ffffff",
+              duration: 1.2,
+            },
+            0.3,
+          );
+
+        // Sequential text staggers on mobile stacking layout
+        tl.to(
+          ".line-1 .word-reveal",
+          {
+            opacity: 1,
+            y: 0,
+            stagger: 0.1,
+            ease: "sine.out",
+            duration: 1.5,
+          },
+          1.5,
+        ).to(
+          ".line-2 .word-reveal",
+          {
+            opacity: 1,
+            y: 0,
+            stagger: 0.1,
+            ease: "sine.out",
+            duration: 1.8,
+          },
+          2.5,
+        );
+      });
+    },
+    { scope: containerRef },
   );
 
-  // 2. Backdrop Accent Neon Orb Glow
-  const glowOpacity = useTransform(
-    scrollYProgress,
-    [0.45, 0.85, 1],
-    [0, 0.75, 0.6],
-  );
-  const glowScale = useTransform(scrollYProgress, [0.9, 1], [1, 0]);
-
-  // 3. Kinetic Hand Animation Mappings
-  const handOpacity = useTransform(scrollYProgress, [0, 0.9, 1], [1, 1, 0]);
-  const handY = useTransform(
-    scrollYProgress,
-    [0, 0.85, 1],
-    ["0px", "-15px", "-120px"],
-  );
-  const handScale = useTransform(
-    scrollYProgress,
-    [0, 0.85, 1],
-    [0.95, 1.06, 0.88],
-  );
-  const handRotate = useTransform(
-    scrollYProgress,
-    [0, 0.85],
-    ["-12deg", "3deg"],
-  );
-  const handFilter = useTransform(
-    scrollYProgress,
-    [0, 0.85, 1],
-    ["blur(0px)", "blur(0px)", "blur(18px)"],
-  );
-
-  // 4. Portfolio Text Reveal (Elastic Spring Split Effect)
-  const portX = useTransform(
-    scrollYProgress,
-    [0, 0.82, 1],
-    ["-160px", "20px", "0px"],
-  );
-  const portXTemplate = useMotionTemplate`calc(-50% + ${portX})`; // Preserves absolute positioning translateX(-50%)
-  const portRotate = useTransform(scrollYProgress, [0, 1], [-18, 0]);
-  const portScale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
-  const portOpacity = useTransform(scrollYProgress, [0.35, 0.85], [0, 1]);
-
-  const folioX = useTransform(
-    scrollYProgress,
-    [0, 0.82, 1],
-    ["160px", "-20px", "0px"],
-  );
-  const folioRotate = useTransform(scrollYProgress, [0, 1], [18, 0]);
-  const folioScale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
-  const folioOpacity = useTransform(scrollYProgress, [0.35, 0.85], [0, 1]);
-
-  // Smoothly light up folio block elements
-  const folioBg = useTransform(
-    scrollYProgress,
-    [0.55, 1],
-    ["rgba(255, 69, 0, 0.1)", "rgba(255, 69, 0, 1)"],
-  );
-  const folioBorderColor = useTransform(
-    scrollYProgress,
-    [0.65, 1],
-    ["#000000", "#ffffff"],
-  );
-
-  // 5. Spotlight Hover Mouse/Touch Coordinate Motion Values
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  // Spotlight circle radius (pixels)
-  const spotlightRadius = useMotionValue(0);
-  const spotlightRadiusSpring = useSpring(spotlightRadius, {
-    stiffness: 180,
-    damping: 22,
-  });
-
-  // Custom pointer light source orb opacity
-  const pointerOpacity = useMotionValue(0);
-  const pointerOpacitySpring = useSpring(pointerOpacity, {
-    stiffness: 200,
-    damping: 25,
-  });
-
-  // Coordinate tracker helper
+  // 2. GSAP Elastic Local Spotlight Mouse/Touch Hover Reveal (Butter-smooth, physical spring response)
   const updateCoordinates = (clientX, clientY) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
-    mouseX.set(clientX - rect.left);
-    mouseY.set(clientY - rect.top);
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+
+    gsap.to(cardRef.current, {
+      "--mouse-x": `${x}px`,
+      "--mouse-y": `${y}px`,
+      duration: 2.5,
+      ease: "elastic.out(1, 0.3)",
+      overwrite: "auto",
+    });
   };
 
   const handleMouseMove = (e) => {
@@ -138,8 +285,13 @@ const Hero = () => {
 
   const handleMouseEnter = (e) => {
     // Expand circle spotlight from 0px to 110px and fade in indicator orb
-    animate(spotlightRadius, 110, { duration: 0.35, ease: "easeOut" });
-    animate(pointerOpacity, 1, { duration: 0.25 });
+    gsap.to(cardRef.current, {
+      "--spotlight-radius": "110px",
+      "--pointer-opacity": 1,
+      duration: 0.5,
+      ease: "power2.out",
+      overwrite: "auto",
+    });
     if (e && e.clientX) {
       updateCoordinates(e.clientX, e.clientY);
     }
@@ -147,8 +299,13 @@ const Hero = () => {
 
   const handleMouseLeave = () => {
     // Shrink spotlight back to 0px on exit
-    animate(spotlightRadius, 0, { duration: 0.35, ease: "easeIn" });
-    animate(pointerOpacity, 0, { duration: 0.25 });
+    gsap.to(cardRef.current, {
+      "--spotlight-radius": "0px",
+      "--pointer-opacity": 0,
+      duration: 0.6,
+      ease: "power2.out",
+      overwrite: "auto",
+    });
   };
 
   const handleTouchStart = (e) => {
@@ -162,119 +319,95 @@ const Hero = () => {
     handleMouseLeave();
   };
 
-  // Mask clip-path driving circle bounds dynamically
-  const spotlightClipPath = useMotionTemplate`circle(${spotlightRadiusSpring}px at ${mouseX}px ${mouseY}px)`;
-
   return (
-    <motion.section
-      ref={sectionRef}
-      className={styles.heroSection}
-      style={{ backgroundColor: heroBg, color: textColor }}
-    >
-      {/* Premium Backdrop Glow Orb */}
-      <motion.div
-        className={styles.glow}
-        style={{ opacity: glowOpacity, scale: glowScale }}
-      />
+    <div ref={containerRef} style={{ width: "100%" }}>
+      <section ref={sectionRef} className={styles.heroSection}>
+        {/* Premium Backdrop Glow Orb */}
+        <div ref={glowRef} className={styles.glow} />
 
-      {/* Hardware-Accelerated Cinematic Hand */}
-      <motion.div
-        className={styles.boyHand}
-        style={{
-          opacity: handOpacity,
-          x: "-50%", // Retain SCSS horizontal translation
-          scale: handScale,
-          rotate: handRotate,
-          filter: handFilter,
-        }}
-      >
-        <Image
-          className={styles.boyHandImage}
-          src={boyHandImage}
-          alt="Boy Hand"
-          priority={true}
-        />
-      </motion.div>
-
-      {/* Title Separation Animation */}
-      <div className={styles.portfolio}>
-        <motion.p
-          className={styles.portText}
-          style={{
-            x: portXTemplate,
-            rotate: portRotate,
-            scale: portScale,
-            opacity: portOpacity,
-          }}
-        >
-          Port
-        </motion.p>
-        <motion.p
-          className={styles.folioText}
-          style={{
-            x: folioX,
-            rotate: folioRotate,
-            scale: folioScale,
-            opacity: folioOpacity,
-            backgroundColor: folioBg,
-            borderColor: folioBorderColor,
-          }}
-        >
-          Folio
-        </motion.p>
-      </div>
-
-      {/* Interactive Flashlight Spotlight Portrait */}
-      <div
-        ref={cardRef}
-        className={styles.portraitContainer}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        {/* Cover Layer (Inactive - Grayscale and Blurred Portrait Grid) */}
-        <div className={styles.coverLayer}>
+        {/* Hardware-Accelerated Cinematic Hand */}
+        <div ref={handRef} className={styles.boyHand}>
           <Image
-            className={styles.silhouetteImage}
-            src={sudhanshuImage}
-            alt="Sudhanshu Outline"
+            className={styles.boyHandImage}
+            src={boyHandImage}
+            alt="Boy Hand"
             priority={true}
           />
-          <div className={styles.coverTextContainer}>
-            <span className={styles.unveilText}>Hover to Unveil</span>
-            <h2 className={styles.creatorName}>Sudhanshu</h2>
+        </div>
+
+        {/* Title Separation Animation */}
+        <div className={styles.portfolio}>
+          <p ref={portTextRef} className={styles.portText}>
+            Port
+          </p>
+          <p ref={folioTextRef} className={styles.folioText}>
+            Folio
+          </p>
+        </div>
+
+        {/* Responsive Split Row Container */}
+        <div className={styles.splitRow}>
+          {/* Left Side: Graphic Manifesto (Staggered Reveals) */}
+          <div ref={manifestoRef} className={styles.manifestoBlock}>
+            <ScrollRevealText
+              text="I AM A PROGRAMMER"
+              fontClass={styles.headlineText}
+              lineClass="line-1"
+            />
+            <ScrollRevealText
+              text="PLACING MYSELF AT THE CUTTING EDGE OF TECHNOLOGY WITH SWIFT ADAPTABILITY."
+              fontClass={styles.gradientStatement}
+              lineClass="line-2"
+            />
+          </div>
+
+          {/* Right Side: Interactive Flashlight Spotlight Portrait */}
+          <div
+            ref={cardRef}
+            className={styles.portraitContainer}
+            onMouseMove={handleMouseMove}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            {/* Cover Layer (Inactive - Grayscale and Blurred Portrait Grid) */}
+            <div className={styles.coverLayer}>
+              <Image
+                className={styles.silhouetteImage}
+                src={sudhanshuImage}
+                alt="Sudhanshu Outline"
+                priority={true}
+              />
+              <div className={styles.coverTextContainer}>
+                <span className={styles.unveilText}>Hover to Unveil</span>
+                <h2 className={styles.creatorName}>Sudhanshu</h2>
+              </div>
+            </div>
+
+            {/* Revealed Layer (Active - Masked Spotlight Circle showing Sharp Full Color Image) */}
+            <div
+              className={styles.revealLayer}
+            >
+              <Image
+                className={styles.revealedImage}
+                src={sudhanshuImage}
+                alt="Sudhanshu Colorized"
+                priority={true}
+              />
+            </div>
+
+            {/* Custom pointer neon source tracker */}
+            <div
+              className={styles.pointerOrb}
+            />
           </div>
         </div>
 
-        {/* Revealed Layer (Active - Masked Spotlight Circle showing Sharp Full Color Image) */}
-        <motion.div
-          className={styles.revealLayer}
-          style={{ clipPath: spotlightClipPath }}
-        >
-          <Image
-            className={styles.revealedImage}
-            src={sudhanshuImage}
-            alt="Sudhanshu Colorized"
-            priority={true}
-          />
-        </motion.div>
-
-        {/* Custom pointer neon source tracker */}
-        <motion.div
-          className={styles.pointerOrb}
-          style={{
-            left: mouseX,
-            top: mouseY,
-            opacity: pointerOpacitySpring,
-          }}
-        />
-      </div>
-
-      {/* <Navbar /> */}
-    </motion.section>
+        {/* <Navbar /> */}
+      </section>
+    </div>
   );
 };
 

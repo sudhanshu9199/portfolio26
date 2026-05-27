@@ -1,0 +1,131 @@
+@use "../../../app/styles/variables" as vars;
+
+.marqueeSection {
+  position: relative;
+  background-color: #0c0319; // Premium pitch black canvas background
+  width: 100%;
+  overflow: hidden;
+  padding: 3rem 0; // Spacing to fully accommodate the slashed background strip
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+// Decorative slightly slanted vibrant orange background strip slashing behind the yellow ticker
+.orangeSlantedStrip {
+  position: absolute;
+  width: 115vw;
+  height: 4rem; // Slightly taller than yellow container to create dynamic layered visual slash borders
+  background: #ff591c; // Vibrant deep orange
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-3deg); // Tilted slant as requested
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.95;
+  box-shadow: 0 4px 15px rgba(255, 89, 28, 0.22);
+  will-change: transform;
+
+  @media (max-width: 768px) {
+    width: 120vw;
+    height: 2.8rem;
+    transform: translate(-50%, -50%) rotate(-3.5deg);
+  }
+}
+
+// Main horizontally straight yellow scrolling ticker strip sitting on top
+.yellowStraightStrip {
+  position: relative;
+  width: 100%;
+  background: #ffb703; // Vibrant yellow-orange color
+  border-top: 1.5px solid #000000;
+  border-bottom: 1.5px solid #000000;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  padding: 0.85rem 0; // Smaller, compact height
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  z-index: 2; // Above the slanted orange strip
+  will-change: transform;
+
+  @media (max-width: 768px) {
+    padding: 0.65rem 0;
+  }
+}
+
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+  cursor: grab;
+  will-change: transform;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.marqueeGroup {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  // Uniform compact spacing between skills and separators
+  gap: 2.5rem;
+  padding-right: 2.5rem; // Ensure identical gap spacing at duplicate boundaries
+
+  @media (max-width: 768px) {
+    gap: 1.6rem;
+    padding-right: 1.6rem;
+  }
+}
+
+.marqueeItem {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem; // Match parent group gap
+
+  @media (max-width: 768px) {
+    gap: 1.6rem;
+  }
+}
+
+.skillText {
+  font-family: vars.$font-ubuntu; // Modern, clean sans-serif
+  font-size: 1.7rem; // Smaller typography layout
+  font-weight: 800; // Thick bold styling
+  color: #000000; // Pitch black charcoal text
+  text-transform: uppercase;
+  letter-spacing: 0.06rem;
+  white-space: nowrap;
+  user-select: none;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.1);
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+    letter-spacing: 0.04rem;
+  }
+}
+
+// Slowly rotating geometric star separator
+.starIcon {
+  color: #000000;
+  width: 22px; // Sleek, smaller separator footprint
+  height: 22px;
+  flex-shrink: 0;
+  animation: spinSlow 15s linear infinite;
+  will-change: transform;
+
+  @media (max-width: 768px) {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+@keyframes spinSlow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
