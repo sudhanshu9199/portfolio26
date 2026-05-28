@@ -4,6 +4,7 @@ import Welcome from "@/components/sections/Welcome/Welcome";
 import HeroSection from "@/components/sections/Hero/Hero";
 import SkillMarquee from "@/components/ui/skillMarquee/SkillMarquee";
 import VideoScroll from "@/components/sections/VideoScroll/VideoScroll";
+import SkillsEdu from "@/components/sections/SkillsEdu/SkillsEdu";
 
 export default function Home() {
   return (
@@ -18,6 +19,9 @@ export default function Home() {
 
       {/* Interactive Video Scroll Scrub Section */}
       <VideoScroll />
+
+      {/* Skills and Education Details section */}
+      <SkillsEdu />
     </main>
   );
 }

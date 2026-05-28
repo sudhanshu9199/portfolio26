@@ -1,0 +1,457 @@
+@use "../../../app/styles/variables" as vars;
+
+.skillsEduSection {
+  position: relative;
+  width: 100%;
+  background-color: #000000; // Premium pitch black canvas background
+  padding: 6rem 0 8rem 0; // Removed horizontal padding to allow the card to bleed flush off the left screen edge
+  display: flex;
+  justify-content: flex-start; // Anchor card to the left side of the screen
+  align-items: center;
+  overflow: hidden;
+  z-index: 7;
+
+  @media (max-width: 768px) {
+    padding: 4rem 0 6rem 0;
+  }
+}
+
+// Subtle ambient glows behind the lavender card
+.ambientGlow {
+  position: absolute;
+  width: 50rem;
+  height: 50rem;
+  background: radial-gradient(
+    circle,
+    rgba(124, 58, 237, 0.15) 0%,
+    rgba(99, 102, 241, 0.08) 50%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  filter: blur(80px);
+  bottom: -10%;
+  right: -5%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+// Main lavender-purple container card anchored flush to the left screen edge, curved only on the right
+.credentialsCard {
+  position: relative;
+  width: 82%; // Spans 82% of the screen width, leaving a margin on the right
+  
+  // High-fidelity semi-transparent deep lavender-violet purple gradient
+  background: linear-gradient(
+    135deg,
+    rgba(124, 58, 237, 0.88) 0%,
+    rgba(79, 70, 229, 0.88) 100%
+  );
+  
+  // Premium glassmorphism backdrop blur to soften the card content and background blend
+  -webkit-backdrop-filter: blur(30px);
+  backdrop-filter: blur(30px);
+
+  // Sweeping, highly-rounded corners only on the right side to match the pillow-cushion design
+  border-radius: 0 7rem 7rem 0;
+
+  // Padding: Generous left padding (8vw) to align internal text beautifully with the rest of the site grid
+  padding: 4.5rem 4.5rem 4.5rem 8vw;
+  margin-left: 0; // Touch the left screen edge
+
+  overflow: hidden;
+  
+  // Volumetric 3D cushioned shadows:
+  // 1. Massive outer soft shadows to blend the card edge smoothly into the dark canvas
+  // 2. High-spread dark inset shadows to slope the card edges downward for a pillowy feel
+  // 3. Delicate inner glass highlight border for ultra-premium depth
+  box-shadow:
+    0 40px 100px rgba(0, 0, 0, 0.75),
+    0 15px 35px rgba(0, 0, 0, 0.45),
+    0 0 50px rgba(124, 58, 237, 0.12),
+    inset 0 35px 50px -15px rgba(0, 0, 0, 0.5),
+    inset -35px 0 50px -15px rgba(0, 0, 0, 0.5),
+    inset 0 -35px 50px -15px rgba(0, 0, 0, 0.5),
+    inset 0 0 25px rgba(255, 255, 255, 0.15);
+
+  // Soft, translucent black frosted border that overlays the background (not the gradient itself)
+  border: 8px solid rgba(0, 0, 0, 0.25);
+  border-left: none; // Bleed flush off the screen edge
+  background-clip: padding-box; // Keeps the purple gradient within the padding box, making the border transparent
+  
+  z-index: 2;
+  will-change: transform, opacity;
+
+  @media (max-width: 1024px) {
+    width: 90%;
+    padding: 3.5rem 3.5rem 3.5rem 6vw;
+    border-radius: 0 5rem 5rem 0;
+    border-width: 6px;
+    box-shadow:
+      0 30px 70px rgba(0, 0, 0, 0.7),
+      inset 0 25px 35px -10px rgba(0, 0, 0, 0.45),
+      inset -25px 0 35px -10px rgba(0, 0, 0, 0.45),
+      inset 0 -25px 35px -10px rgba(0, 0, 0, 0.45),
+      inset 0 0 20px rgba(255, 255, 255, 0.12);
+  }
+
+  @media (max-width: 768px) {
+    width: 95%;
+    padding: 2.5rem 1.8rem 2.5rem 5vw;
+    border-radius: 0 3.5rem 3.5rem 0;
+    border-width: 5px;
+    box-shadow:
+      0 20px 50px rgba(0, 0, 0, 0.65),
+      inset 0 20px 25px -8px rgba(0, 0, 0, 0.4),
+      inset -20px 0 25px -8px rgba(0, 0, 0, 0.4),
+      inset 0 -20px 25px -8px rgba(0, 0, 0, 0.4),
+      inset 0 0 15px rgba(255, 255, 255, 0.1);
+  }
+}
+
+// High-fidelity textured graphic overlay
+.noiseOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.015) 1px,
+    transparent 0
+  );
+  background-size: 24px 24px;
+  pointer-events: none;
+  opacity: 0.8;
+  z-index: 1;
+}
+
+.gridContainer {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1.25fr 1fr; // Balanced layout for long left column
+  gap: 4rem;
+
+  @media (max-width: 1024px) {
+    gap: 3rem;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
+.leftColumn,
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+
+  @media (max-width: 768px) {
+    gap: 3rem;
+  }
+}
+
+.gridGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+// Goldman futuristic geometric bold italic headers
+.groupHeader {
+  font-family: vars.$font-roboto;
+  font-size: 2.3rem;
+  font-weight: 800;
+  font-style: italic;
+  color: #ffffff;
+  letter-spacing: 0.05rem;
+  text-transform: capitalize;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 1.8rem;
+  }
+}
+
+.dateBadge {
+  font-family: vars.$font-exo;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 0.25rem 0.9rem;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(4px);
+}
+
+// 1. Education Timelines styling
+.educationContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.eduItem {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.universityName {
+  font-family: vars.$font-ubuntu;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.25rem 0;
+}
+
+.degreeTitle {
+  font-family: vars.$font-ubuntu;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 0.5rem 0;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: vars.$font-hind;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+
+  .divider {
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .cgpa {
+    font-weight: 700;
+    color: #ffd700; // Glowing gold text color for GPA
+    background: rgba(255, 215, 0, 0.08);
+    padding: 0.05rem 0.4rem;
+    border-radius: 4px;
+  }
+}
+
+// 2. Technical Skills styling
+.skillsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.skillCategory {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.categoryLabel {
+  font-family: vars.$font-ubuntu;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.categoryValue {
+  font-family: vars.$font-hind;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.35;
+}
+
+// 3. Interests styling
+.interestsRow {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.interestTag {
+  font-family: vars.$font-ubuntu;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+.dividerPipe {
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 1.1rem;
+  user-select: none;
+}
+
+// 4. Soft Skills 2x2 grid styling exactly matching the image
+.softSkillsGrid {
+  display: flex;
+  width: 100%;
+  gap: 2rem;
+  justify-content: space-between;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+.softSkillCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  flex: 1;
+}
+
+.softSkillDivider {
+  width: 1px;
+  background: rgba(255, 255, 255, 0.653);
+  align-self: stretch;
+
+  @media (max-width: 480px) {
+    display: none;
+  }
+}
+
+.softSkillItem {
+  font-family: vars.$font-ubuntu;
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: #ffffff;
+  padding: 0.4rem 0;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+}
+
+// 5. Languages styling
+.languagesRow {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.langItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.langName {
+  font-family: vars.$font-ubuntu;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+// 6. Experience & Courses styling
+.experienceContent,
+.coursesContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.courseItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.courseName {
+  font-family: vars.$font-ubuntu;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.25rem 0;
+}
+
+.coursePlatform {
+  font-family: vars.$font-ubuntu;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 0.8rem 0;
+}
+
+.courseTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.courseTag {
+  font-family: vars.$font-hind;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor: default;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.45);
+    transform: scale(1.04) translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Glowing Golden Verify Badge Style for Professional Certificates
+.certificateLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: vars.$font-exo;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #ffd700; // Premium glowing gold
+  background: rgba(255, 215, 0, 0.08);
+  border: 1px solid rgba(255, 215, 0, 0.25);
+  padding: 0.25rem 0.85rem;
+  border-radius: 6px;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  margin-top: 0.7rem;
+  width: fit-content;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+
+  &:hover {
+    background: rgba(255, 215, 0, 0.18);
+    border-color: #ffd700;
+    box-shadow: 
+      0 0 15px rgba(255, 215, 0, 0.25),
+      0 4px 12px rgba(0, 0, 0, 0.25);
+    transform: translateY(-2px);
+  }
+}
