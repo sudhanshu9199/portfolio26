@@ -1,0 +1,119 @@
+@use "../../../app/styles/variables" as vars;
+
+// Symmetrical rounded Projects section container with pure white background
+.projectsSection {
+  position: relative;
+  width: 100%;
+  background-color: #ffffff; // Premium white canvas backdrop
+  padding: 4rem 0 10rem 0; // Cushioned padding-bottom for the sticky deck
+
+  // Highly rounded top-left and top-right corners for cards-sheet scroll overlap
+  border-radius: 4.5rem 4.5rem 0 0;
+
+  // Subtle dark top outline to blend from the previous navy blue section
+  border-top: 1.5px solid rgba(0, 0, 0, 0.08);
+
+  // Soft, elegant drop shadow
+  box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.04);
+
+  z-index: 8; // Sits on top of SkillsEdu
+  margin-top: -3.5rem;
+
+  // CRITICAL PRODUCTION FIX: position: sticky inside a container absolute fails
+  // if overflow is hidden, because it creates a new clipping context.
+  // Setting overflow to visible restores sticky stacking deck mechanics!
+  overflow: visible;
+
+  @media (max-width: 1024px) {
+    border-radius: 3.5rem 3.5rem 0 0;
+    padding: 3rem 0 8rem 0;
+    margin-top: -2.5rem;
+  }
+
+  @media (max-width: 768px) {
+    border-radius: 2.5rem 2.5rem 0 0;
+    padding: 2.5rem 0 6rem 0;
+    margin-top: -1.8rem;
+  }
+}
+
+// Sticky Title Mask Wrapper
+.titleWrapper {
+  position: sticky;
+  top: 0;
+  z-index: 10; // Sit above the cards scrolling behind it
+
+  // PRODUCTION FIX: Replace the solid white block with a smooth, premium white-to-transparent linear gradient mask!
+  // This maintains absolute title readability while preventing any harsh white-bar clipping of cards as they scroll up.
+  background: linear-gradient(
+    to bottom,
+    #ffffff 0%,
+    #ffffff 65%,
+    rgba(255, 255, 255, 0.9) 82%,
+    rgba(255, 255, 255, 0) 100%
+  );
+
+  padding: 3rem 0 2rem 0;
+  margin: 0 0 5rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 1024px) {
+    padding: 2.5rem 0 1.5rem 0;
+    margin-bottom: 4rem;
+  }
+
+  @media (max-width: 768px) {
+    padding: 2rem 0 1rem 0;
+    margin-bottom: 3rem;
+  }
+}
+
+// Title Relative Inner Wrapper for subpixel-perfect text stacking
+.titleInner {
+  position: relative;
+  display: inline-block;
+}
+
+// Symmetrical font properties for both outline and solid filled title layers
+.sectionTitle {
+  font-family: vars.$font-anton;
+  font-size: 5.5rem; // Reduced text size for extra premium and balanced typography
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: 0.3rem;
+  text-transform: uppercase;
+  line-height: 0.95;
+  margin: 0;
+}
+
+// Layer 1: Hollow black outline layer (always visible underneath initially)
+.titleOutline {
+  color: transparent;
+  -webkit-text-stroke: 2.2px #000000;
+  display: block;
+  will-change: opacity;
+
+  @media (max-width: 768px) {
+    -webkit-text-stroke: 1.5px #000000;
+  }
+}
+
+// Layer 2: Solid filled black layer sits directly on top and animates its clip-path
+// Borderless styling ensures a clean, stroke-free solid typography look once fully filled
+.titleSolid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: #000000;
+  -webkit-text-stroke: 0px transparent; // Clean borderless solid fill
+  display: block;
+  margin: 0;
+
+  // Initially fully clipped from top (completely hidden, revealing bottom-to-top)
+  clip-path: inset(100% 0 0 0);
+  will-change: clip-path;
+}

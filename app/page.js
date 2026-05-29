@@ -5,6 +5,7 @@ import HeroSection from "@/components/sections/Hero/Hero";
 import SkillMarquee from "@/components/ui/skillMarquee/SkillMarquee";
 import VideoScroll from "@/components/sections/VideoScroll/VideoScroll";
 import SkillsEdu from "@/components/sections/SkillsEdu/SkillsEdu";
+import Projects from "@/components/sections/Projects/Projects";
 
 export default function Home() {
   return (
@@ -22,6 +23,9 @@ export default function Home() {
 
       {/* Skills and Education Details section */}
       <SkillsEdu />
+
+      {/* Selected Projects Showcase section */}
+      <Projects />
     </main>
   );
 }

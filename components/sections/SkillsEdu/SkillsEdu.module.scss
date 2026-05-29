@@ -3,7 +3,16 @@
 .skillsEduSection {
   position: relative;
   width: 100%;
-  background-color: #000000; // Premium pitch black canvas background
+
+  // A seamless linear gradient that blends from the pure black of videoScroll to your premium rich navy blue
+  background: linear-gradient(
+    to bottom,
+    #000000 0%,
+    #01081b 15%,
+    #021239 45%,
+    #022067 100%
+  );
+
   padding: 6rem 0 8rem 0; // Removed horizontal padding to allow the card to bleed flush off the left screen edge
   display: flex;
   justify-content: flex-start; // Anchor card to the left side of the screen
@@ -13,6 +22,27 @@
 
   @media (max-width: 768px) {
     padding: 4rem 0 6rem 0;
+  }
+}
+
+// Glowing blurred top transition entering from the black VideoScroll section
+.topBlurTransition {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(
+    to bottom,
+    #000000 0%,
+    rgba(1, 8, 27, 0.75) 45%,
+    rgba(2, 18, 57, 0) 100%
+  );
+  z-index: 3;
+  pointer-events: none;
+
+  @media (max-width: 768px) {
+    height: 95px;
   }
 }
 
@@ -38,14 +68,14 @@
 .credentialsCard {
   position: relative;
   width: 82%; // Spans 82% of the screen width, leaving a margin on the right
-  
+
   // High-fidelity semi-transparent deep lavender-violet purple gradient
   background: linear-gradient(
     135deg,
     rgba(124, 58, 237, 0.88) 0%,
     rgba(79, 70, 229, 0.88) 100%
   );
-  
+
   // Premium glassmorphism backdrop blur to soften the card content and background blend
   -webkit-backdrop-filter: blur(30px);
   backdrop-filter: blur(30px);
@@ -58,7 +88,7 @@
   margin-left: 0; // Touch the left screen edge
 
   overflow: hidden;
-  
+
   // Volumetric 3D cushioned shadows:
   // 1. Massive outer soft shadows to blend the card edge smoothly into the dark canvas
   // 2. High-spread dark inset shadows to slope the card edges downward for a pillowy feel
@@ -73,10 +103,10 @@
     inset 0 0 25px rgba(255, 255, 255, 0.15);
 
   // Soft, translucent black frosted border that overlays the background (not the gradient itself)
-  border: 8px solid rgba(0, 0, 0, 0.25);
+  // border: 8px solid rgba(0, 0, 0, 0.25);
   border-left: none; // Bleed flush off the screen edge
   background-clip: padding-box; // Keeps the purple gradient within the padding box, making the border transparent
-  
+
   z-index: 2;
   will-change: transform, opacity;
 
@@ -449,7 +479,7 @@
   &:hover {
     background: rgba(255, 215, 0, 0.18);
     border-color: #ffd700;
-    box-shadow: 
+    box-shadow:
       0 0 15px rgba(255, 215, 0, 0.25),
       0 4px 12px rgba(0, 0, 0, 0.25);
     transform: translateY(-2px);

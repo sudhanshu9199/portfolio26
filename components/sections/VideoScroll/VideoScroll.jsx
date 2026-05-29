@@ -163,6 +163,9 @@ const VideoScroll = () => {
         { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.8, ease: "power2.out" },
         2.1,
       );
+
+      // Force a Refresh to recalibrate downstream triggers because the pinning adds +=220% height
+      ScrollTrigger.refresh();
     },
     { dependencies: [preloaded], scope: sectionRef },
   );
@@ -212,6 +215,9 @@ const VideoScroll = () => {
           </h2>
         </div>
       </div>
+
+      {/* Smooth blurry transition overlay blending into SkillsEdu navy blue */}
+      <div className={styles.bottomBlurTransition} />
     </section>
   );
 };

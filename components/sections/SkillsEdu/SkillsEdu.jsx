@@ -66,6 +66,9 @@ const SkillsEdu = () => {
 
   return (
     <section ref={sectionRef} className={styles.skillsEduSection} aria-label="Skills and Credentials">
+      {/* Smooth blur transition entering from videoScroll */}
+      <div className={styles.topBlurTransition} />
+
       {/* Abstract neon glow shapes in background for premium 2026 aesthetics */}
       <div className={styles.ambientGlow} />
 

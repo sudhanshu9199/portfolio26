@@ -43,22 +43,25 @@ const Welcome = () => {
             priority={true}
           />
         </motion.div>
-        <Image src={bulbIcon} className={`${styles.bulbIcon} ${styles.icon}`} />
+        <Image src={bulbIcon} alt="Creative Idea Bulb" className={`${styles.bulbIcon} ${styles.icon}`} />
         <Image
           src={pencilIcon}
+          alt="Design Pencil"
           className={`${styles.pencilIcon} ${styles.icon}`}
         />
-        <Image src={jsIcon} className={`${styles.jsIcon} ${styles.icon}`} />
+        <Image src={jsIcon} alt="JavaScript Logo" className={`${styles.jsIcon} ${styles.icon}`} />
         <Image
           src={mongodbIcon}
+          alt="MongoDB Logo"
           className={`${styles.mongodbIcon} ${styles.icon}`}
         />
         <Image
           src={nodejsIcon}
+          alt="Node.js Logo"
           className={`${styles.nodejsIcon} ${styles.icon}`}
         />
-        <Image src={reactIcon} className={`${styles.reactIcon} ${styles.icon}`} />
-        <Image src={gridIcon} className={`${styles.gridIcon} ${styles.icon}`} />
+        <Image src={reactIcon} alt="React Logo" className={`${styles.reactIcon} ${styles.icon}`} />
+        <Image src={gridIcon} alt="Abstract Grid Icon" className={`${styles.gridIcon} ${styles.icon}`} />
       </div>
     </section>
   );
